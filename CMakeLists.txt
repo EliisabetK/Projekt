@@ -10,6 +10,7 @@ add_executable(Projekt main.cpp
         utility.cpp
         config.h
         api_suhtlus.h
+        andmestruktuurid.h
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include)
