@@ -1,1 +1,0 @@
-//TODO: info ilusalt väljastamine terminali
