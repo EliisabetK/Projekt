@@ -18,7 +18,7 @@ void CLI::start() {
             if (koostisaine.empty()) {
                 break; // Lõpeta tsükkel, kui kasutaja sisestab tühja rea
             }
-            koostisained.push_back(koostiscaine);
+            koostisained.push_back(koostisaine);
         }
 
         // Koosta otsingutermin koostisainete põhjal
