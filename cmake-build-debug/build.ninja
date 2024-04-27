@@ -52,35 +52,35 @@ build cmake_object_order_depends_target_Projekt: phony || CMakeFiles/Projekt.dir
 build CMakeFiles/Projekt.dir/main.cpp.obj: CXX_COMPILER__Projekt_unscanned_Debug C$:/Users/eliis/CLionProjects/Projekt/main.cpp || cmake_object_order_depends_target_Projekt
   DEP_FILE = CMakeFiles\Projekt.dir\main.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/libs/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
+  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
   OBJECT_DIR = CMakeFiles\Projekt.dir
   OBJECT_FILE_DIR = CMakeFiles\Projekt.dir
 
 build CMakeFiles/Projekt.dir/api_suhtlus.cpp.obj: CXX_COMPILER__Projekt_unscanned_Debug C$:/Users/eliis/CLionProjects/Projekt/api_suhtlus.cpp || cmake_object_order_depends_target_Projekt
   DEP_FILE = CMakeFiles\Projekt.dir\api_suhtlus.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/libs/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
+  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
   OBJECT_DIR = CMakeFiles\Projekt.dir
   OBJECT_FILE_DIR = CMakeFiles\Projekt.dir
 
 build CMakeFiles/Projekt.dir/retsepti_otsing.cpp.obj: CXX_COMPILER__Projekt_unscanned_Debug C$:/Users/eliis/CLionProjects/Projekt/retsepti_otsing.cpp || cmake_object_order_depends_target_Projekt
   DEP_FILE = CMakeFiles\Projekt.dir\retsepti_otsing.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/libs/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
+  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
   OBJECT_DIR = CMakeFiles\Projekt.dir
   OBJECT_FILE_DIR = CMakeFiles\Projekt.dir
 
-build CMakeFiles/Projekt.dir/user_interface.cpp.obj: CXX_COMPILER__Projekt_unscanned_Debug C$:/Users/eliis/CLionProjects/Projekt/user_interface.cpp || cmake_object_order_depends_target_Projekt
-  DEP_FILE = CMakeFiles\Projekt.dir\user_interface.cpp.obj.d
+build CMakeFiles/Projekt.dir/CLI.cpp.obj: CXX_COMPILER__Projekt_unscanned_Debug C$:/Users/eliis/CLionProjects/Projekt/CLI.cpp || cmake_object_order_depends_target_Projekt
+  DEP_FILE = CMakeFiles\Projekt.dir\CLI.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/libs/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
+  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
   OBJECT_DIR = CMakeFiles\Projekt.dir
   OBJECT_FILE_DIR = CMakeFiles\Projekt.dir
 
 build CMakeFiles/Projekt.dir/utility.cpp.obj: CXX_COMPILER__Projekt_unscanned_Debug C$:/Users/eliis/CLionProjects/Projekt/utility.cpp || cmake_object_order_depends_target_Projekt
   DEP_FILE = CMakeFiles\Projekt.dir\utility.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/libs/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
+  INCLUDES = -IC:/Users/eliis/CLionProjects/Projekt/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/include
   OBJECT_DIR = CMakeFiles\Projekt.dir
   OBJECT_FILE_DIR = CMakeFiles\Projekt.dir
 
@@ -92,9 +92,9 @@ build CMakeFiles/Projekt.dir/utility.cpp.obj: CXX_COMPILER__Projekt_unscanned_De
 #############################################
 # Link the executable Projekt.exe
 
-build Projekt.exe: CXX_EXECUTABLE_LINKER__Projekt_Debug CMakeFiles/Projekt.dir/main.cpp.obj CMakeFiles/Projekt.dir/api_suhtlus.cpp.obj CMakeFiles/Projekt.dir/retsepti_otsing.cpp.obj CMakeFiles/Projekt.dir/user_interface.cpp.obj CMakeFiles/Projekt.dir/utility.cpp.obj | C$:/Users/eliis/CLionProjects/Projekt/libs/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/lib/libcurl.dll.a
+build Projekt.exe: CXX_EXECUTABLE_LINKER__Projekt_Debug CMakeFiles/Projekt.dir/main.cpp.obj CMakeFiles/Projekt.dir/api_suhtlus.cpp.obj CMakeFiles/Projekt.dir/retsepti_otsing.cpp.obj CMakeFiles/Projekt.dir/CLI.cpp.obj CMakeFiles/Projekt.dir/utility.cpp.obj | C$:/Users/eliis/CLionProjects/Projekt/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/lib/libcurl.dll.a
   FLAGS = -g
-  LINK_LIBRARIES = C:/Users/eliis/CLionProjects/Projekt/libs/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/lib/libcurl.dll.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_LIBRARIES = C:/Users/eliis/CLionProjects/Projekt/curl-8.7.1_7-win64-mingw/curl-8.7.1_7-win64-mingw/lib/libcurl.dll.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Projekt.dir
   POST_BUILD = cd .
   PRE_LINK = cd .

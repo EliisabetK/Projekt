@@ -1,18 +1,16 @@
-//TODO: info ilusalt väljastamine terminali aka CLI
-
 #include "CLI.h"
-#include "api_suhtlus.h"
+#include "retsepti_otsing.h"
 #include <iostream>
+
 using namespace std;
 
 void CLI::start() {
     bool continueLoop = true; // Muutuja, mis näitab, kas programm peaks uuesti alustama
     while (continueLoop) { // Algab loop
-
         vector<string> koostisained;
         string koostisaine;
 
-        // Küsi kasutajalt toiduained, kuni kasutaja sisestab tühja rea
+        // Küsib kasutajalt toiduained, kuni kasutaja sisestab tühja rea
         cout << "Sisesta toiduained (inglise keeles, eraldi ridadel, lopetamiseks vajuta enterit 2 korda):" << endl;
         while (getline(cin, koostisaine)) {
             if (koostisaine.empty()) {
@@ -21,95 +19,60 @@ void CLI::start() {
             koostisained.push_back(koostisaine);
         }
 
-        // Koosta otsingutermin koostisainete põhjal
+        // Koostab otsingutermini koostisainete põhjal
         string otsinguTerm = "";
         for(size_t i = 0; i < koostisained.size(); ++i) {
-            otsinguTerm += koostisained[i];
+            for (char c : koostisained[i]) {
+                if (c == ' ') { // Asendab tühikud %20ga, et mitte lõhkuda URL-i
+                    otsinguTerm += "%20";
+                } else {
+                    otsinguTerm += c;
+                }
+            }
             if (i != koostisained.size() - 1) {
                 otsinguTerm += "%20";
             }
         }
 
-        // Hangi retseptid API abil
-        string jsonString = FetchData(otsinguTerm);
-        map<string, vector<string>> retseptid;
+        // Leiab retseptid
+        map<string, vector<string>> retseptid = leiaRetseptid(otsinguTerm);
+        kuvaRetseptid(otsinguTerm, retseptid);
 
-        string key = "\"text\":\"";
-        string labelKey = "\"label\":\"";
-        size_t start, end;
-
-        // Esimese retsepti algus
-        size_t retseptStart = jsonString.find("\"recipe\":{");
-
-        // Leiab esimesed kolm retsepti
-        for (int i = 0; i < 3; ++i) {
-            if (retseptStart != string::npos) {
-                // Leiab retsepti lõpu
-                size_t retseptLopp = jsonString.find("}}", retseptStart);
-
-                if (retseptLopp != string::npos) {
-                    string retsept = jsonString.substr(retseptStart, retseptLopp - retseptStart);
-
-                    // Otsib toidu nime
-                    start = retsept.find(labelKey);
-                    if (start != string::npos) {
-                        start += labelKey.length();
-                        end = retsept.find("\"", start);
-                        string toiduNimi = retsept.substr(start, end - start);
-
-                        // Leiab koostisained
-                        vector<string> koostisained;
-                        start = retsept.find(key);
-                        while (start != string::npos) {
-                            start += key.length();
-                            end = retsept.find("\"", start);
-                            koostisained.push_back(retsept.substr(start, end - start));
-                            start = retsept.find(key, end);
-                        }
-
-                        // Lisab koostisained mappi vastava nimega toidu juurde
-                        retseptid[toiduNimi] = koostisained;
-                    }
-
-                    // Otsib järgmise retsepti alguse
-                    retseptStart = jsonString.find("\"recipe\":{", retseptLopp);
-                }
-            }
-        }
-
-        // Kuvab retseptid
-        displayRecipes(otsinguTerm, retseptid);
-
-        // Küsi kasutajalt, kas nad soovivad uuesti proovida
-        char choice;
+        // Küsib kasutajalt, kas nad soovivad uuesti proovida
+        char valik;
         cout << "Kas tahad uuesti proovida (Y/N)? ";
-        cin >> choice;
+        cin >> valik;
         cin.ignore(); // Tühjendab puhvri
 
-        if (choice != 'Y' && choice != 'y') { // Kui vastus ei ole Y või y, siis lõpeta loop
+        if (valik != 'Y' && valik != 'y') {  // Kui vastus ei ole Y või y, siis lõpeta loop
             continueLoop = false;
         }
     }
 }
 
-
-string CLI::FetchData(const string& searchTerms) {
-    APISuhtlus apiSuhtlus;
-    return apiSuhtlus.FetchData(searchTerms);
-}
-
-void CLI::displayRecipes(const string& otsinguTerm, const map<string, vector<string>>& recipes) {
-    if (recipes.empty()) {
+void CLI::kuvaRetseptid(const string& otsinguTerm, const map<string, vector<string>>& retseptid) {
+    if (retseptid.empty()) { // Kui retsepte ei leitud
         cout << "Probleem 1 voi enama toiduainega. Palun proovi uuesti" << endl;
     } else {
-        for (const auto& retsept : recipes) {
+        for (const auto &retsept: retseptid) {
             cout << "Roog: " << retsept.first << endl;
             cout << "Koostisained:" << endl;
-            for (const auto& koostisaine : retsept.second) {
-                cout << "- " << koostisaine << endl;
+            for (const auto &koostisaine: retsept.second) {
+                string asendus = koostisaine;
+                map<string, string> fractions = {{"½", "1/2"}, {"⅛", "1/8"}, {"¼", "1/4"}, {"¾", "3/4"}, {"⅓", "1/3"}}; // Neid sümboleid ei kuvata korrektselt
+                for (const auto &fraction : fractions) {
+                    size_t pos = asendus.find(fraction.first);
+                    while (pos != string::npos) {
+                        asendus.replace(pos, 2, fraction.second);
+                        pos = asendus.find(fraction.first, pos + 1);
+                    }
+                }
+                cout << "- " << asendus << endl;
             }
             cout << endl;
         }
     }
 }
+
+
 
