@@ -2,14 +2,15 @@
 #include "api_suhtlus.h"
 #include <map>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
-map<string, vector<string>> leiaRetseptid(const string& otsinguTerm){
+vector<Recipe> leiaRetseptid(const string& otsinguTerm) {
     // Hangib retseptid API abil
     APISuhtlus apiSuhtlus;
     string jsonString = apiSuhtlus.FetchData(otsinguTerm);
-    map<string, vector<string>> retseptid;
+    vector<Recipe> retseptid;
 
     string key = "\"text\":\"";
     string labelKey = "\"label\":\"";
@@ -18,8 +19,8 @@ map<string, vector<string>> leiaRetseptid(const string& otsinguTerm){
     // Esimese retsepti algus
     size_t retseptStart = jsonString.find("\"recipe\":{");
 
-    // Leiab esimesed viis retsepti
-    for (int i = 0; i < 5; ++i) {
+    // Leiab esimesed kolm retsepti
+    for (int i = 0; i < 3; ++i) {
         if (retseptStart != string::npos) {
             // Leiab retsepti lõpu
             size_t retseptLopp = jsonString.find("}}", retseptStart);
@@ -44,8 +45,59 @@ map<string, vector<string>> leiaRetseptid(const string& otsinguTerm){
                         start = retsept.find(key, end);
                     }
 
-                    // Lisab koostisained mappi vastava nimega toidu juurde
-                    retseptid[toiduNimi] = koostisained;
+                    // Leiab toitained
+                    map<string, double> toitaineteInfo;
+                    string nutrientsKey = "\"totalNutrients\":{";
+                    start = retsept.find(nutrientsKey);
+                    if (start != string::npos) {
+                        start += nutrientsKey.length();
+                        end = retsept.find("}", start);
+                        string toitained = retsept.substr(start, end - start);
+
+                        // Otsib proteiinid, kalorid, rasvad ja suhkrud
+                        vector<pair<string, string>> toitaineNimed = {
+                                {"PROCNT", "Protein"},
+                                {"ENERC_KCAL", "Energy"},
+                                {"FAT", "Fat"},
+                                {"CHOCDF", "Carbs"},
+                                {"SUGAR", "Sugars"}
+                        };
+
+                        for (const auto& toitaine : toitaineNimed) {
+                            size_t toitaineStart = toitained.find("\"" + toitaine.first + "\":{");
+                            if (toitaineStart != string::npos) {
+                                size_t quantityStart = toitained.find("\"quantity\":", toitaineStart);
+                                if (quantityStart != string::npos) {
+                                    quantityStart += 11; // length of "\"quantity\":"
+                                    size_t quantityEnd = toitained.find(",", quantityStart);
+                                    double quantity = stod(toitained.substr(quantityStart, quantityEnd - quantityStart));
+                                    toitaineteInfo[toitaine.second] = quantity;
+                                }
+                            }
+                        }
+                    }
+
+                    // Leiab allergiad
+                    vector<string> allergiad;
+                    string allergiaKey = "\"healthLabels\":[";  // Eeldame, et allergia teave on salvestatud "healthLabels" võtme all
+                    start = retsept.find(allergiaKey);
+                    if (start != string::npos) {
+                        start += allergiaKey.length();
+                        end = retsept.find("]", start);
+                        string allergiaString = retsept.substr(start, end - start);
+
+                        size_t allergiaStart = 0;
+                        size_t allergiaEnd = allergiaString.find(",");
+                        while (allergiaEnd != string::npos) {
+                            allergiad.push_back(allergiaString.substr(allergiaStart, allergiaEnd - allergiaStart));
+                            allergiaStart = allergiaEnd + 1;
+                            allergiaEnd = allergiaString.find(",", allergiaStart);
+                        }
+                        allergiad.push_back(allergiaString.substr(allergiaStart));
+                    }
+
+                    // Lisab retsepti vektorisse
+                    retseptid.push_back(Recipe(toiduNimi, koostisained, toitaineteInfo, allergiad));
                 }
 
                 // Otsib järgmise retsepti alguse
@@ -55,3 +107,7 @@ map<string, vector<string>> leiaRetseptid(const string& otsinguTerm){
     }
     return retseptid;
 }
+
+
+
+

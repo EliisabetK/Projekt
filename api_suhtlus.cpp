@@ -1,5 +1,7 @@
 #include "api_suhtlus.h"
 #include <curl/curl.h>
+#include <iostream>
+using namespace std;
 
 // Funktsioon, mida kasutatakse cURL-i poolt andmete kirjutamiseks
 size_t APISuhtlus::WriteCallback(void* contents, size_t size, size_t nmemb, std::string* userp) {
@@ -11,6 +13,7 @@ size_t APISuhtlus::WriteCallback(void* contents, size_t size, size_t nmemb, std:
 std::string APISuhtlus::FetchData(const std::string& otsinguTerm) {
     // Koostab URLi, lisades otsingutermini ja API võtme
     std::string url = "https://api.edamam.com/search?q=" + otsinguTerm + "&app_id=9503ebdc&app_key=1cbfe671329790b26036d65a8719b890";
+    std::cout<< url;
 
     CURL* curl;
     CURLcode res; // Muutuja kuhu salvestatakse cURLi tulemus
