@@ -1,5 +1,3 @@
-//
-// Created by Eliisabet on 20/05/2024.
-//
+//TODO: nt poenimekirja salvestamine faili
 
 #include "failid.h"

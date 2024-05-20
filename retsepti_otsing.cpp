@@ -1,8 +1,9 @@
+//TODO: see ei leia valke ja carbe ja rasvu millegi pärast, tuleks parandada
+
 #include "retsepti_otsing.h"
 #include "api_suhtlus.h"
 #include <map>
 #include <vector>
-#include <iostream>
 
 using namespace std;
 

@@ -43,6 +43,5 @@ std::string APISuhtlus::FetchData(const std::string& otsinguTerm) {
         curl_easy_cleanup(curl);
     }
     curl_global_cleanup();
-
     return readBuffer; // Tagastab saadud andmed
 }

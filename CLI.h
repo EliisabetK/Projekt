@@ -4,8 +4,6 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <unordered_set>
-#include "api_suhtlus.h"
 #include "retsepti_otsing.h"
 
 class CLI {
@@ -20,24 +18,23 @@ public:
         CLI::retseptiIndeks = retseptiIndeks;
     }
 
-public:
     void start();
 
-    static void otsiKoostisainetePõhjal();
-
-    static void otsiNimega();
+    void otsiRetsept(bool koostisainetePohjal);
 
     static bool prooviUuesti();
 
-    static std::string koostaOtsinguTerm(const std::vector<std::string> &koostisained);
+    static std::string koostaOtsinguTerm(const std::vector<std::string>& koostisained);
 
-    static void kuvaRetseptid(std::vector<Recipe>& retseptid);
+    void kuvaDetailid(const std::vector<Recipe>& retseptid, const std::string& detail, void (CLI::*kuvaFunktsioon)(const std::vector<Recipe>&));
 
-    static void kuvaToitained(const std::vector<Recipe> &toitained);
+    void kuvaRetseptid(std::vector<Recipe>& retseptid);
 
-    static void kuvaAllergeenid(const std::vector<Recipe>& retseptid);
+    void kuvaToitained(const std::vector<Recipe>& toitained);
 
-    static std::vector<Recipe> genereeriRohkemRetsepte(std::string otsinguTerm, std::vector<Recipe>& retseptid, int indeks);
+    void kuvaAllergeenid(const std::vector<Recipe>& retseptid);
 
+    static std::vector<Recipe> genereeriRohkemRetsepte(const std::string& otsinguTerm, std::vector<Recipe>& retseptid, int indeks);
 };
+
 #endif // CLI_H

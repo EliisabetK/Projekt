@@ -1,3 +1,8 @@
+//TODO: võiks teha et kui vale input pannakse siis annab mingi custom errori et vigane sisend ja küsib uuesti
+//TODO: teha nii et saab valida ühe kuvatud retseptidest ja selle ained salvestada poenimekirja
+//TODO: output võiks olla ilusam ja võiks olla arusaadavam, et mis olekus ollakse, kui "proovi uuesti" küsitakse + mingid random tühikud on
+//TODO: see prindib millegi pärast selle lingi iga kord?? see tuleks parandada
+
 #include "CLI.h"
 #include "retsepti_otsing.h"
 #include <iostream>
@@ -16,25 +21,36 @@ void CLI::start() {
         cin >> valik;
         cin.ignore(); // Tühjendab puhvri
 
-        switch(valik) {
-            case 'a': otsiKoostisainetePõhjal(); break;
-            case 'b': otsiNimega(); break;
-            default: cout << "Ebasobiv valik. Vali uuesi.\n"; break;
+        switch (valik) {
+            case 'a': otsiRetsept(true); break;
+            case 'b': otsiRetsept(false); break;
+            default: cout << "Ebasobiv valik. Vali uuesti.\n"; break;
         }
 
         if (!prooviUuesti()) break;
     }
 }
-void CLI::otsiKoostisainetePõhjal() {
+
+void CLI::otsiRetsept(bool koostisainetePohjal) {
     while (true) {
         vector<string> koostisained;
-        string koostisaine;
-        cout << "Sisesta toiduained (inglise keeles, eraldi ridadel, lopetamiseks vajuta enterit 2 korda):" << endl;
-        while (getline(cin, koostisaine) && !koostisaine.empty()) {
-            koostisained.push_back(koostisaine);
+        string otsinguTerm;
+
+        if (koostisainetePohjal) {
+            cout << "Sisesta toiduained (inglise keeles, eraldi ridadel, lopetamiseks vajuta enterit 2 korda):" << endl;
+            string koostisaine;
+            while (getline(cin, koostisaine) && !koostisaine.empty()) {
+                koostisained.push_back(koostisaine);
+            }
+            otsinguTerm = koostaOtsinguTerm(koostisained);
+        } else {
+            cout << "Sisesta soovitud retsept (nt 'chicken noodle soup'): ";
+            string retsept;
+            getline(cin, retsept);
+            otsinguTerm = koostaOtsinguTerm({retsept});
         }
 
-        vector<Recipe> retseptid = leiaRetseptid(koostaOtsinguTerm(koostisained), 0);
+        vector<Recipe> retseptid = leiaRetseptid(otsinguTerm, 0);
         kuvaRetseptid(retseptid);
 
         if (retseptid.empty()) {
@@ -42,29 +58,18 @@ void CLI::otsiKoostisainetePõhjal() {
             continue;
         }
 
-        char valik;
-        cout << "Kas tahad naha toitaineinfot (Y/N)? ";
-        cin >> valik;
-        cin.ignore(); // Tühjendab puhvri
-        if (valik == 'Y' || valik == 'y') {
-            kuvaToitained(retseptid);
-        }
+        kuvaDetailid(retseptid, "toitaineinfot", &CLI::kuvaToitained);
+        kuvaDetailid(retseptid, "allergeene", &CLI::kuvaAllergeenid);
 
-        cout << "Kas tahad naha allergeene (Y/N)? ";
-        cin >> valik;
-        cin.ignore(); // Tühjendab puhvri
-        if (valik == 'Y' || valik == 'y') {
-            kuvaAllergeenid(retseptid);
-        }
-        while(true) {
-            cout << "Kas tahad naha rohkem retsepte (Y/N)? ";
+        while (true) {
+            cout << "Kas tahad leida rohkem retsepte (Y/N)? ";
+            char valik;
             cin >> valik;
             cin.ignore(); // Tühjendab puhvri
             if (valik == 'Y' || valik == 'y') {
-                genereeriRohkemRetsepte(koostaOtsinguTerm(koostisained), retseptid, retseptiIndeks + 3);
+                genereeriRohkemRetsepte(otsinguTerm, retseptid, retseptiIndeks + 3);
                 kuvaRetseptid(retseptid);
-            }
-            else{
+            } else {
                 setRetseptiIndeks(0);
                 break;
             }
@@ -74,35 +79,13 @@ void CLI::otsiKoostisainetePõhjal() {
     }
 }
 
-void CLI::otsiNimega() {
-    while (true) {
-        cout << "Sisesta soovitud retsept (nt 'chicken noodle soup'): ";
-        string retsept;
-        getline(cin, retsept);
-        vector<Recipe> retseptid = leiaRetseptid(koostaOtsinguTerm({retsept}), 0);
-        kuvaRetseptid(retseptid);
-
-        if (retseptid.empty()) {
-            if (!prooviUuesti()) break;
-            continue;
-        }
-
-        char valik;
-        cout << "Kas tahad naha toitaineinfot (Y/N)? ";
-        cin >> valik;
-        cin.ignore(); // Tühjendab puhvri
-        if (valik == 'Y' || valik == 'y') {
-            kuvaToitained(retseptid);
-        }
-
-        cout << "Kas tahad naha allergeene (Y/N)? ";
-        cin >> valik;
-        cin.ignore(); // Tühjendab puhvri
-        if (valik == 'Y' || valik == 'y') {
-            kuvaAllergeenid(retseptid);
-        }
-
-        if (!prooviUuesti()) break;
+void CLI::kuvaDetailid(const vector<Recipe>& retseptid, const string& detail, void (CLI::*kuvaFunktsioon)(const vector<Recipe>&)) {
+    char valik;
+    cout << "Kas tahad naha " << detail << " (Y/N)? ";
+    cin >> valik;
+    cin.ignore(); // Tühjendab puhvri
+    if (valik == 'Y' || valik == 'y') {
+        (this->*kuvaFunktsioon)(retseptid);
     }
 }
 
@@ -127,12 +110,11 @@ bool CLI::prooviUuesti() {
     return (valik == 'Y' || valik == 'y');
 }
 
-
 void CLI::kuvaRetseptid(vector<Recipe>& retseptid) {
     if (retseptid.empty()) {
         cout << "Probleem 1 voi enama toiduainega. Palun proovi uuesti" << endl;
     } else {
-        for (Recipe& retsept : retseptid) {  // Use a reference here
+        for (Recipe& retsept : retseptid) {
             if (!retsept.näidatud) {
                 cout << "Roog: " << retsept.name << endl;
                 retsept.näidatud = true;
@@ -145,14 +127,13 @@ void CLI::kuvaRetseptid(vector<Recipe>& retseptid) {
                                                      {"¼", "1/4"},
                                                      {"¾", "3/4"},
                                                      {"⅓", "1/3"}};
-                    for (const auto &fraction: fractions) {
+                    for (const auto& fraction : fractions) {
                         size_t pos = asendus.find(fraction.first);
                         while (pos != string::npos) {
                             asendus.replace(pos, 2, fraction.second);
                             pos = asendus.find(fraction.first, pos + 1);
                         }
                     }
-
                     cout << "- " << asendus << endl;
                 }
                 cout << endl;
@@ -161,50 +142,37 @@ void CLI::kuvaRetseptid(vector<Recipe>& retseptid) {
     }
 }
 
-
-void CLI::kuvaToitained(const vector<Recipe> &toitained) {
-    if (toitained.empty()) {
-        cout << "Probleem 1 voi enama toiduainega. Palun proovi uuesti" << endl;
-    } else {
-        for (const auto& retsept : toitained) {
-            cout << "Roog: " << retsept.name << endl;
-            cout << "Toitained:" << endl;
-            for (const auto& toitaine : retsept.nutrients) {
-                cout << "- " << toitaine.first << ": " << toitaine.second << endl;
-            }
-            cout << endl;
+void CLI::kuvaToitained(const vector<Recipe>& toitained) {
+    for (const auto& retsept : toitained) {
+        cout << "Roog: " << retsept.name << endl;
+        cout << "Toitained:" << endl;
+        for (const auto& toitaine : retsept.nutrients) {
+            cout << "- " << toitaine.first << ": " << toitaine.second << endl;
         }
+        cout << endl;
     }
 }
 
 void CLI::kuvaAllergeenid(const vector<Recipe>& retseptid) {
-    if (retseptid.empty()) {
-        cout << "Probleem 1 voi enama toiduainega. Palun proovi uuesti" << endl;
-    } else {
-        for (const auto& retsept : retseptid) {
-            cout << "Roog: " << retsept.name << endl;
-            cout << "Allergeenid:" << endl;
-            for (const auto& allergeen : retsept.allergiad) {
-                cout << "- " << allergeen << endl;
-            }
-            cout << endl;
+    for (const auto& retsept : retseptid) {
+        cout << "Roog: " << retsept.name << endl;
+        cout << "Allergeenid:" << endl;
+        for (const auto& allergeen : retsept.allergiad) {
+            cout << "- " << allergeen << endl;
         }
+        cout << endl;
     }
 }
 
-vector<Recipe> CLI::genereeriRohkemRetsepte(const string otsinguTerm, vector<Recipe>& retseptid, int indeks) {
+vector<Recipe> CLI::genereeriRohkemRetsepte(const string& otsinguTerm, vector<Recipe>& retseptid, int indeks) {
     vector<Recipe> rohkemRetsepte = leiaRetseptid(otsinguTerm, indeks);
-    if(rohkemRetsepte.empty()){
-        cout << "Rohkem retsepte ei leidu."<<endl;
-    }
-    else{
-    setRetseptiIndeks(indeks+3);
-    for (Recipe& uusRetsept : rohkemRetsepte) {
-        retseptid.push_back(uusRetsept);
+    if (rohkemRetsepte.empty()) {
+        cout << "Rohkem retsepte ei leidu." << endl;
+    } else {
+        setRetseptiIndeks(indeks + 3);
+        for (Recipe& uusRetsept : rohkemRetsepte) {
+            retseptid.push_back(uusRetsept);
         }
     }
     return retseptid;
 }
-
-
-
