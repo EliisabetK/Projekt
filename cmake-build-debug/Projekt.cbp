@@ -99,6 +99,12 @@
 		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/config.h">
 			<Option target="Projekt"/>
 		</Unit>
+		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/failid.cpp">
+			<Option target="Projekt"/>
+		</Unit>
+		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/failid.h">
+			<Option target="Projekt"/>
+		</Unit>
 		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/main.cpp">
 			<Option target="Projekt"/>
 		</Unit>

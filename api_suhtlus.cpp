@@ -3,17 +3,25 @@
 #include <iostream>
 using namespace std;
 
+APISuhtlus::APISuhtlus(const std::string& apiKey, const std::string& appId)
+        : apiKey(apiKey), appId(appId) {}
+
+APISuhtlus& APISuhtlus::getInstance() { // App key ja app id otsingute jaoks
+    static APISuhtlus instance("1cbfe671329790b26036d65a8719b890", "9503ebdc");
+    return instance;
+}
+
+
 // Funktsioon, mida kasutatakse cURL-i poolt andmete kirjutamiseks
 size_t APISuhtlus::WriteCallback(void* contents, size_t size, size_t nmemb, std::string* userp) {
-    ((std::string*)userp)->append((char*)contents, size * nmemb);
+    userp->append((char*)contents, size * nmemb);
     return size * nmemb; // Tagastab töödeldud andmete suuruse
 }
 
 // Funktsioon, mis teeb API päringu ja tagastab saadud andmed
 std::string APISuhtlus::FetchData(const std::string& otsinguTerm) {
-    // Koostab URLi, lisades otsingutermini ja API võtme
-    std::string url = "https://api.edamam.com/search?q=" + otsinguTerm + "&app_id=9503ebdc&app_key=1cbfe671329790b26036d65a8719b890";
-    std::cout<< url;
+    std::string url = "https://api.edamam.com/search?q=" + otsinguTerm + "&app_id=" + appId + "&app_key=" + apiKey;
+    std::cout << url << endl;
 
     CURL* curl;
     CURLcode res; // Muutuja kuhu salvestatakse cURLi tulemus

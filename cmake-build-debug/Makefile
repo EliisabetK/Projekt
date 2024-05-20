@@ -176,6 +176,30 @@ api_suhtlus.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Projekt.dir\build.make CMakeFiles/Projekt.dir/api_suhtlus.cpp.s
 .PHONY : api_suhtlus.cpp.s
 
+failid.obj: failid.cpp.obj
+.PHONY : failid.obj
+
+# target to build an object file
+failid.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Projekt.dir\build.make CMakeFiles/Projekt.dir/failid.cpp.obj
+.PHONY : failid.cpp.obj
+
+failid.i: failid.cpp.i
+.PHONY : failid.i
+
+# target to preprocess a source file
+failid.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Projekt.dir\build.make CMakeFiles/Projekt.dir/failid.cpp.i
+.PHONY : failid.cpp.i
+
+failid.s: failid.cpp.s
+.PHONY : failid.s
+
+# target to generate assembly for a file
+failid.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Projekt.dir\build.make CMakeFiles/Projekt.dir/failid.cpp.s
+.PHONY : failid.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -263,6 +287,9 @@ help:
 	@echo ... api_suhtlus.obj
 	@echo ... api_suhtlus.i
 	@echo ... api_suhtlus.s
+	@echo ... failid.obj
+	@echo ... failid.i
+	@echo ... failid.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

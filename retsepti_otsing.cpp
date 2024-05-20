@@ -6,9 +6,8 @@
 
 using namespace std;
 
-vector<Recipe> leiaRetseptid(const string& otsinguTerm) {
-    // Hangib retseptid API abil
-    APISuhtlus apiSuhtlus;
+vector<Recipe> leiaRetseptid(const string& otsinguTerm, int startIndex) {
+    APISuhtlus& apiSuhtlus = APISuhtlus::getInstance();
     string jsonString = apiSuhtlus.FetchData(otsinguTerm);
     vector<Recipe> retseptid;
 
@@ -16,8 +15,15 @@ vector<Recipe> leiaRetseptid(const string& otsinguTerm) {
     string labelKey = "\"label\":\"";
     size_t start, end;
 
-    // Esimese retsepti algus
     size_t retseptStart = jsonString.find("\"recipe\":{");
+
+    for (int i = 0; i < startIndex; ++i) {
+        if (retseptStart != string::npos) {
+            retseptStart = jsonString.find("\"recipe\":{", retseptStart + 1);
+        } else {
+            return retseptid;
+        }
+    }
 
     // Leiab esimesed kolm retsepti
     for (int i = 0; i < 3; ++i) {
@@ -68,7 +74,7 @@ vector<Recipe> leiaRetseptid(const string& otsinguTerm) {
                             if (toitaineStart != string::npos) {
                                 size_t quantityStart = toitained.find("\"quantity\":", toitaineStart);
                                 if (quantityStart != string::npos) {
-                                    quantityStart += 11; // length of "\"quantity\":"
+                                    quantityStart += 11; // "\"quantity\":" pikkus
                                     size_t quantityEnd = toitained.find(",", quantityStart);
                                     double quantity = stod(toitained.substr(quantityStart, quantityEnd - quantityStart));
                                     toitaineteInfo[toitaine.second] = quantity;
@@ -97,7 +103,7 @@ vector<Recipe> leiaRetseptid(const string& otsinguTerm) {
                     }
 
                     // Lisab retsepti vektorisse
-                    retseptid.push_back(Recipe(toiduNimi, koostisained, toitaineteInfo, allergiad));
+                    retseptid.push_back(Recipe(toiduNimi, koostisained, toitaineteInfo, allergiad, false));
                 }
 
                 // Otsib järgmise retsepti alguse
