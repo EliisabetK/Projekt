@@ -1,12 +1,12 @@
-//TODO: nt poenimekirja salvestamine faili
-
 #ifndef PROJEKT_FAILID_H
 #define PROJEKT_FAILID_H
 
+#include <string>
+#include <vector>
 
-class failid {
-
+class Failid {
+public:
+    static void salvestaPoenimekiri(const std::string& failinimi, const std::vector<std::string>& koostisained);
 };
 
-
-#endif //PROJEKT_FAILID_H
+#endif // PROJEKT_FAILID_H

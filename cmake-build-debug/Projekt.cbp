@@ -96,9 +96,6 @@
 		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/api_suhtlus.h">
 			<Option target="Projekt"/>
 		</Unit>
-		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/config.h">
-			<Option target="Projekt"/>
-		</Unit>
 		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/failid.cpp">
 			<Option target="Projekt"/>
 		</Unit>
@@ -114,7 +111,7 @@
 		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/retsepti_otsing.h">
 			<Option target="Projekt"/>
 		</Unit>
-		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/utility.cpp">
+		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/utility.h">
 			<Option target="Projekt"/>
 		</Unit>
 		<Unit filename="C:/Users/eliis/CLionProjects/Projekt1/CMakeLists.txt">

@@ -248,30 +248,6 @@ retsepti_otsing.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Projekt.dir\build.make CMakeFiles/Projekt.dir/retsepti_otsing.cpp.s
 .PHONY : retsepti_otsing.cpp.s
 
-utility.obj: utility.cpp.obj
-.PHONY : utility.obj
-
-# target to build an object file
-utility.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Projekt.dir\build.make CMakeFiles/Projekt.dir/utility.cpp.obj
-.PHONY : utility.cpp.obj
-
-utility.i: utility.cpp.i
-.PHONY : utility.i
-
-# target to preprocess a source file
-utility.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Projekt.dir\build.make CMakeFiles/Projekt.dir/utility.cpp.i
-.PHONY : utility.cpp.i
-
-utility.s: utility.cpp.s
-.PHONY : utility.s
-
-# target to generate assembly for a file
-utility.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Projekt.dir\build.make CMakeFiles/Projekt.dir/utility.cpp.s
-.PHONY : utility.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -296,9 +272,6 @@ help:
 	@echo ... retsepti_otsing.obj
 	@echo ... retsepti_otsing.i
 	@echo ... retsepti_otsing.s
-	@echo ... utility.obj
-	@echo ... utility.i
-	@echo ... utility.s
 .PHONY : help
 
 

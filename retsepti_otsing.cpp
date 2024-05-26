@@ -1,9 +1,8 @@
-//TODO: see ei leia valke ja carbe ja rasvu millegi pärast, tuleks parandada
-
 #include "retsepti_otsing.h"
 #include "api_suhtlus.h"
 #include <map>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -58,9 +57,8 @@ vector<Recipe> leiaRetseptid(const string& otsinguTerm, int startIndex) {
                     start = retsept.find(nutrientsKey);
                     if (start != string::npos) {
                         start += nutrientsKey.length();
-                        end = retsept.find("}", start);
+                        end = retsept.find("]}}", start); // leiab retsepti lõpu
                         string toitained = retsept.substr(start, end - start);
-
                         // Otsib proteiinid, kalorid, rasvad ja suhkrud
                         vector<pair<string, string>> toitaineNimed = {
                                 {"PROCNT", "Protein"},
@@ -71,11 +69,11 @@ vector<Recipe> leiaRetseptid(const string& otsinguTerm, int startIndex) {
                         };
 
                         for (const auto& toitaine : toitaineNimed) {
-                            size_t toitaineStart = toitained.find("\"" + toitaine.first + "\":{");
+                            size_t toitaineStart = toitained.find(toitaine.first);
                             if (toitaineStart != string::npos) {
                                 size_t quantityStart = toitained.find("\"quantity\":", toitaineStart);
                                 if (quantityStart != string::npos) {
-                                    quantityStart += 11; // "\"quantity\":" pikkus
+                                    quantityStart += 11; // szee on "\"quantity\":" pikkus
                                     size_t quantityEnd = toitained.find(",", quantityStart);
                                     double quantity = stod(toitained.substr(quantityStart, quantityEnd - quantityStart));
                                     toitaineteInfo[toitaine.second] = quantity;

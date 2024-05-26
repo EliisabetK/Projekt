@@ -7,8 +7,7 @@ add_executable(Projekt main.cpp
         api_suhtlus.cpp
         retsepti_otsing.cpp
         CLI.cpp
-        utility.cpp
-        config.h
+        utility.h
         api_suhtlus.h
         CLI.h
         retsepti_otsing.h

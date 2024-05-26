@@ -21,7 +21,6 @@ size_t APISuhtlus::WriteCallback(void* contents, size_t size, size_t nmemb, std:
 // Funktsioon, mis teeb API päringu ja tagastab saadud andmed
 std::string APISuhtlus::FetchData(const std::string& otsinguTerm) {
     std::string url = "https://api.edamam.com/search?q=" + otsinguTerm + "&app_id=" + appId + "&app_key=" + apiKey;
-    std::cout << url << endl;
 
     CURL* curl;
     CURLcode res; // Muutuja kuhu salvestatakse cURLi tulemus
